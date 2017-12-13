@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+      <Rgx_Feedo>
+         <active>true</active>
+         <codePool>local</codePool>
+      </Rgx_Feedo>
+    </modules>
+</config>
