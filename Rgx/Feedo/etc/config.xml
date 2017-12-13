@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Rgx_Feedo>
+            <version>0.1.0</version>
+        </Rgx_Feedo>
+    </modules>
+
+    <frontend>
+        <layout>
+            <updates>
+                <Feedo>
+                    <file>Rgx_Feedo.xml</file>
+                </Feedo>
+            </updates>
+        </layout>
+
+        <routers>
+            <Feedo>
+                <use>standard</use>
+                <args>
+                    <module>Rgx_Feedo</module>
+                    <frontName>Feedo</frontName>
+                </args>
+            </Feedo>
+        </routers>
+    </frontend>
+
+    <admin>
+        <routers>
+            <Feedo>
+                <use>admin</use>
+                <args>
+                    <module>Rgx_Feedo</module>
+                    <frontName>admin_Feedo</frontName>
+                </args>
+            </Feedo>
+        </routers>
+    </admin>
+
+    <global>
+        <helpers>
+            <Feedo>
+                <class>Rgx_Feedo_Helper</class>
+            </Feedo>
+        </helpers>
+        <blocks>
+            <feedo>
+                <class>Rgx_Feedo_Block</class>
+            </feedo>
+        </blocks>
+
+        <!-- models> </models -->
+
+        <!-- events> </events -->
+
+        <!-- resources> </resources -->
+    </global>
+
+
+    <adminhtml>
+        <layout>
+            <updates>
+                <Feedo>
+                    <file>Rgx_Feedo.xml</file>
+                </Feedo>
+            </updates>
+        </layout>
+        <menu>
+            <Feedo module="Feedo">
+                <title>Feedo</title>
+                <sort_order>100</sort_order>
+                <children>
+                    <Feedo module="Feedo">
+                        <title>Settings</title>
+                        <sort_order>0</sort_order>
+                        <action>admin_Feedo/adminhtml_Feedo</action>
+                    </Feedo>
+                </children>
+            </Feedo>
+        </menu>
+
+        <acl>
+            <resources>
+                <admin>
+                    <children>
+                        <Rgx_Feedo translate="title" module="Feedo">
+                            <title>Rgx Feedo</title>
+                            <sort_order>0</sort_order>
+                            <children>
+                                <Feedo translate="title" module="Feedo">
+                                    <title>Setting</title>
+                                    <sort_order>100</sort_order>
+                                </Feedo>
+                            </children>
+                        </Rgx_Feedo>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+
+    </adminhtml>
+</config>
