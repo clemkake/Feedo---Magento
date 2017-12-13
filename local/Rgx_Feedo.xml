@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<layout version="1.0">
+<feedo_adminhtml_feedo_index>
+	<!--remove name="header"/>
+	<remove name="footer "/-->
+
+   <reference name="content">
+     <block type="adminhtml/template" name="Feedo" template="Rgx_Feedo/feedoshow.phtml"/>
+   </reference>
+   
+</feedo_adminhtml_feedo_index>
+</layout>
