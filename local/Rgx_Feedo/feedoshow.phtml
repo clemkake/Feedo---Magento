@@ -1,87 +1,266 @@
-<style>
-body {font-family: Arial;}
-
-/* Style the tab */
-div.tab {
-    overflow: hidden;
-    border: 1px solid #ccc;
-    background-color: #f1f1f1;
-}
-
-/* Style the buttons inside the tab */
-div.tab button {
-    background-color: inherit;
-    float: left;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    padding: 14px 16px;
-    transition: 0.3s;
-    font-size: 17px;
-}
-
-/* Change background color of buttons on hover */
-div.tab button:hover {
-    background-color: #ddd;
-}
-
-/* Create an active/current tablink class */
-div.tab button.active {
-    background-color: #ccc;
-}
-
-/* Style the tab content */
-.tabcontent {
-    display: none;
-    padding: 6px 12px;
-    border: 1px solid #ccc;
-    border-top: none;
-}
-</style>
-
-<form>
-	<input name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey() ?>" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 
-<p>Click on the buttons inside the tabbed menu:</p>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-<div class="tab">
-  <button class="tablinks" onclick="openCity(event, 'London')">London</button>
-  <button class="tablinks" onclick="openCity(event, 'Paris')">Paris</button>
-  <button class="tablinks" onclick="openCity(event, 'Tokyo')">Tokyo</button>
-</div>
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
-<div id="London" class="tabcontent">
-  <h3>London</h3>
-  <p>London is the capital city of England.</p>
-</div>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-<div id="Paris" class="tabcontent">
-  <h3>Paris</h3>
-  <p>Paris is the capital of France.</p> 
-</div>
+<script type="text/javascript">
+    var fakewaffle = ( function ( $, fakewaffle ) {
+      'use strict';
 
-<div id="Tokyo" class="tabcontent">
-  <h3>Tokyo</h3>
-  <p>Tokyo is the capital of Japan.</p>
-</div>
-</form>
+      fakewaffle.responsiveTabs = function ( collapseDisplayed ) {
 
+        fakewaffle.currentPosition = 'tabs';
 
+        var tabGroups = $( '.nav-tabs.responsive' );
+        var hidden    = '';
+        var visible   = '';
+        var activeTab = '';
 
+        if ( collapseDisplayed === undefined ) {
+          collapseDisplayed = [ 'xs', 'sm' ];
+        }
 
-<script>
-function openCity(evt, cityName) {
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-    document.getElementById(cityName).style.display = "block";
-    evt.currentTarget.className += " active";
-}
+        $.each( collapseDisplayed, function () {
+          hidden  += ' hidden-' + this;
+          visible += ' visible-' + this;
+        } );
+
+        $.each( tabGroups, function ( index ) {
+          var collapseDiv;
+          var $tabGroup = $( this );
+          var tabs      = $tabGroup.find( 'li a' );
+
+          if ( $tabGroup.attr( 'id' ) === undefined ) {
+            $tabGroup.attr( 'id', 'tabs-' + index );
+          }
+
+          collapseDiv = $( '<div></div>', {
+            'class' : 'panel-group responsive' + visible,
+            'id'    : 'collapse-' + $tabGroup.attr( 'id' )
+          } );
+
+          $.each( tabs, function () {
+            var $this          = $( this );
+            var oldLinkClass   = $this.attr( 'class' ) === undefined ? '' : $this.attr( 'class' );
+            var newLinkClass   = 'accordion-toggle';
+            var oldParentClass = $this.parent().attr( 'class' ) === undefined ? '' : $this.parent().attr( 'class' );
+            var newParentClass = 'panel panel-default';
+            var newHash        = $this.get( 0 ).hash.replace( '#', 'collapse-' );
+
+            if ( oldLinkClass.length > 0 ) {
+              newLinkClass += ' ' + oldLinkClass;
+            }
+
+            if ( oldParentClass.length > 0 ) {
+              oldParentClass = oldParentClass.replace( /\bactive\b/g, '' );
+              newParentClass += ' ' + oldParentClass;
+              newParentClass = newParentClass.replace( /\s{2,}/g, ' ' );
+              newParentClass = newParentClass.replace( /^\s+|\s+$/g, '' );
+            }
+
+            if ( $this.parent().hasClass( 'active' ) ) {
+              activeTab = '#' + newHash;
+            }
+
+            collapseDiv.append(
+              $( '<div>' ).attr( 'class', newParentClass ).html(
+                $( '<div>' ).attr( 'class', 'panel-heading' ).html(
+                  $( '<h4>' ).attr( 'class', 'panel-title' ).html(
+                    $( '<a>', {
+                      'class'       : newLinkClass,
+                      'data-toggle' : 'collapse',
+                      'data-parent' : '#collapse-' + $tabGroup.attr( 'id' ),
+                      'href'        : '#' + newHash,
+                      'html'        : $this.html()
+                    } )
+                  )
+                )
+              ).append(
+                $( '<div>', {
+                  'id'    : newHash,
+                  'class' : 'panel-collapse collapse'
+                } )
+              )
+            );
+          } );
+
+          $tabGroup.next().after( collapseDiv );
+          $tabGroup.addClass( hidden );
+          $( '.tab-content.responsive' ).addClass( hidden );
+
+          if ( activeTab ) {
+            $( activeTab ).collapse( 'show' );
+          }
+        } );
+
+        fakewaffle.checkResize();
+        fakewaffle.bindTabToCollapse();
+      };
+
+      fakewaffle.checkResize = function () {
+
+        if ( $( '.panel-group.responsive' ).is( ':visible' ) === true && fakewaffle.currentPosition === 'tabs' ) {
+          fakewaffle.tabToPanel();
+          fakewaffle.currentPosition = 'panel';
+        } else if ( $( '.panel-group.responsive' ).is( ':visible' ) === false && fakewaffle.currentPosition === 'panel' ) {
+          fakewaffle.panelToTab();
+          fakewaffle.currentPosition = 'tabs';
+        }
+
+      };
+
+      fakewaffle.tabToPanel = function () {
+
+        var tabGroups = $( '.nav-tabs.responsive' );
+
+        $.each( tabGroups, function ( index, tabGroup ) {
+
+          // Find the tab
+          var tabContents = $( tabGroup ).next( '.tab-content' ).find( '.tab-pane' );
+
+          $.each( tabContents, function ( index, tabContent ) {
+            // Find the id to move the element to
+            var destinationId = $( tabContent ).attr( 'id' ).replace ( /^/, '#collapse-' );
+
+            // Convert tab to panel and move to destination
+            $( tabContent )
+              .removeClass( 'tab-pane' )
+              .addClass( 'panel-body fw-previous-tab-pane' )
+              .appendTo( $( destinationId ) );
+
+          } );
+
+        } );
+
+      };
+
+      fakewaffle.panelToTab = function () {
+
+        var panelGroups = $( '.panel-group.responsive' );
+
+        $.each( panelGroups, function ( index, panelGroup ) {
+
+          var destinationId = $( panelGroup ).attr( 'id' ).replace( 'collapse-', '#' );
+          var destination   = $( destinationId ).next( '.tab-content' )[ 0 ];
+
+          // Find the panel contents
+          var panelContents = $( panelGroup ).find( '.panel-body.fw-previous-tab-pane' );
+
+          // Convert to tab and move to destination
+          panelContents
+            .removeClass( 'panel-body fw-previous-tab-pane' )
+            .addClass( 'tab-pane' )
+            .appendTo( $( destination ) );
+
+        } );
+
+      };
+
+      fakewaffle.bindTabToCollapse = function () {
+
+        var tabs     = $( '.nav-tabs.responsive' ).find( 'li a' );
+        var collapse = $( '.panel-group.responsive' ).find( '.panel-collapse' );
+
+        // Toggle the panels when the associated tab is toggled
+        tabs.on( 'shown.bs.tab', function ( e ) {
+
+          if (fakewaffle.currentPosition === 'tabs') {
+            var $current  = $( e.currentTarget.hash.replace( /#/, '#collapse-' ) );
+            $current.collapse( 'show' );
+
+            if ( e.relatedTarget ) {
+              var $previous = $( e.relatedTarget.hash.replace( /#/, '#collapse-' ) );
+              $previous.collapse( 'hide' );
+            }
+          }
+
+        } );
+
+        // Toggle the tab when the associated panel is toggled
+        collapse.on( 'shown.bs.collapse', function ( e ) {
+
+          if (fakewaffle.currentPosition === 'panel') {
+            // Activate current tabs
+            var current = $( e.target ).context.id.replace( /collapse-/g, '#' );
+            $( 'a[href="' + current + '"]' ).tab( 'show' );
+
+            // Update the content with active
+            var panelGroup = $( e.currentTarget ).closest( '.panel-group.responsive' );
+            $( panelGroup ).find( '.panel-body' ).removeClass( 'active' );
+            $( e.currentTarget ).find( '.panel-body' ).addClass( 'active' );
+          }
+
+        } );
+      };
+
+      $( window ).resize( function () {
+        fakewaffle.checkResize();
+      } );
+
+      return fakewaffle;
+  }( window.jQuery, fakewaffle || { } ) );
 </script>
+
+
+  <style type="text/css">
+      .glyphoname {
+            padding-left: 10px;
+            padding-right: 2px;
+      }
+  </style>
+
+  <div style="padding-left: 60%;">
+    <i class="glyphicon glyphicon-bell "></i> <span class="glyphoname"> Notifications</span>
+    <i class="glyphicon glyphicon-user "></i><span class="glyphoname"> Profile</span>
+    <i class="glyphicon glyphicon-cog "></i><span class="glyphoname"> Settings</span>
+  </div>
+
+  <div class="container">
+
+      <!-- Main component for a primary marketing message or call to action -->
+      
+      <!-- ====================================== examples ====================================== -->
+      
+      <ul class="nav nav-tabs responsive hidden-xs hidden-sm" id="myTab">
+        <li class="test-class"><a class="deco-none red-class" href="#resp-tab1"><span class="glyphicon glyphicon-cog"></span> Tab 1</a></li>
+        <li class="test-class"><a href="#resp-tab2"><span class="glyphicon glyphicon-headphones"></span> Tab 2</a></li>
+        <li class="active"><a class="deco-none" href="#resp-tab3"><span class="glyphicon glyphicon-folder-open"></span> Tab 3</a></li>
+      </ul>
+
+      <div class="tab-content responsive hidden-xs hidden-sm">
+        <div class="tab-pane" id="resp-tab1">Tab 1 ... Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu posuere tortor. Phasellus consectetur aliquet risus, in lacinia erat ullamcorper a. Suspendisse molestie porta metus, at cursus elit. Quisque et neque nec velit tincidunt fringilla. <button class="btn btn-primary js-alert-test">Test Event Maintained</button></div>
+        <div class="tab-pane" id="resp-tab2">Tab 2 ... Phasellus consectetur aliquet risus, in lacinia erat ullamcorper a. Suspendisse molestie porta metus, at cursus elit. Quisque et neque nec velit tincidunt fringilla. Morbi eget nisi molestie, egestas turpis non, pharetra orci. Donec mattis sem ipsum, eu dapibus lacus rutrum in. Fusce blandit mi leo, non feugiat nunc tempus vitae.</div>
+        <div class="tab-pane active" id="resp-tab3">Tab 3 ... Quisque et neque nec velit tincidunt fringilla. Morbi eget nisi molestie, egestas turpis non, pharetra orci. Donec mattis sem ipsum, eu dapibus lacus rutrum in. Fusce blandit mi leo, non feugiat nunc tempus vitae. Mauris hendrerit, leo sit amet mollis bibendum, lacus augue auctor turpis, sed placerat augue libero quis massa.</div>
+      </div><div class="panel-group responsive visible-xs visible-sm" id="collapse-myTab"><div class="panel panel-default test-class"><div class="panel-heading"><h4 class="panel-title"><a class="accordion-toggle deco-none red-class collapsed" data-toggle="collapse" data-parent="#collapse-myTab" href="#collapse-resp-tab1" aria-expanded="false"><span class="glyphicon glyphicon-cog"></span> Tab 1</a></h4></div><div id="collapse-resp-tab1" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;"></div></div><div class="panel panel-default test-class"><div class="panel-heading"><h4 class="panel-title"><a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#collapse-myTab" href="#collapse-resp-tab2" aria-expanded="false"><span class="glyphicon glyphicon-headphones"></span> Tab 2</a></h4></div><div id="collapse-resp-tab2" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;"></div></div><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a class="accordion-toggle deco-none" data-toggle="collapse" data-parent="#collapse-myTab" href="#collapse-resp-tab3" aria-expanded="true"><span class="glyphicon glyphicon-folder-open"></span> Tab 3</a></h4></div><div id="collapse-resp-tab3" class="panel-collapse collapse in" aria-expanded="true" style=""></div></div></div>
+
+      <hr>
+
+      
+      
+      
+
+      
+
+      
+
+      
+
+      
+      
+
+      
+        
+          
+          
+          <div class="alert alert-info">
+            <strong>Note:</strong> The only difference from the standard bootstrap tab markup to the responsive markup is the addition of the <em class="text-danger">responsive</em>, and calling the <code>fakewaffle.responsiveTabs();</code> function.
+          </div>
+          
+    </div>
